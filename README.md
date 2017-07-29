@@ -1,5 +1,9 @@
 # Oraclize-BioID
 
+## Motivation
+
+* [Biometric Authentication is Cool](https://playground.bioid.com/ExploreBiometrics)
+
 ## Dependencies
 
 * [Azure CLI](https://github.com/Azure/azure-cli)
@@ -52,6 +56,16 @@ $ kill <PID>
 # configure docker to use the ssh tunnel
 $ export DOCKER_HOST=:2375
 ```
+
+#### Warning!
+
+You will probably want to unset `DOCKER_HOST`, if you plan to use docker-compose locally for testing (and you should).
+
+```
+$ unset DOCKER_HOST
+```
+
+> Remember to `export DOCKER_HOST=:2375` after setting up your ssh tunnel.
 
 ### Building / Starting your dockerized app
 
