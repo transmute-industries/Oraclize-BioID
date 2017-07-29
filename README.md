@@ -37,7 +37,9 @@ $ az group deployment create -g ti-acs-swarm-rg -n ti-acs-swarm --template-uri h
 Before we proceed, please read this:
 
 ```
-These instructions focus on tunneling TCP traffic over SSH. You can also start an interactive SSH session with one of the internal cluster management systems, but we don't recommend this. Working directly on an internal system risks inadvertent configuration changes.
+These instructions focus on tunneling TCP traffic over SSH. 
+You can also start an interactive SSH session with one of the internal cluster management systems, but we don't recommend this. 
+Working directly on an internal system risks inadvertent configuration changes.
 ```
 
 ```
