@@ -1,13 +1,13 @@
 {
-  "name": "docker_oraclize_bioid",
-  "version": "1.0.0",
+  "name": "oraclize_bioid_server",
+  "version": "0.1.0",
   "description": "Node.js on Docker",
   "author": "Orie Steele <orie@transmute.industries>",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "docker:build": "docker build -t or13/oraclize-bioid-server .",
-    "docker:start": "docker run -p 8080:8080 -it or13/oraclize-bioid-server"
+    "docker:build": "docker build -t oraclize_bioid_server .",
+    "docker:start": "docker run -p 8080:8080 -it oraclize_bioid_server"
   },
   "dependencies": {
     "express": "^4.13.3"

@@ -1,0 +1,28 @@
+
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "dnsNamePrefix": {
+      "value": "ti-acs-swarm"
+    },
+    "agentCount": {
+      "value": 3
+    },
+    "agentVMSize" : {
+      "value": "Standard_A0"
+    },
+    "linuxAdminUsername": {
+      "value": "or13"
+    },
+    "orchestratorType": {
+      "value": "Swarm"
+    },
+    "masterCount": {
+      "value": 1
+    },
+    "sshRSAPublicKey": {
+      "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDAmf5Yy7NNelhj5MTIQdsJTesl5+DY8IoKXWSsdMzzwttrfHDwWJQ8vDKN/HRlMMjwnO4e0R+CZWi/pZoey+cHTmOsIqDBIP+jwgd1FhQbZH6IpKZOGgG4DxCtnn2+CPP0qJDv3JFSkKqVy/HJbd4oghXGfJz7epoRtDP0Z8+duw30OrAzr1trGdrb9b2rUtll7BrcLEkRk1P0SKCRlH0Oms8dMr1liIE6eOjnqPyHtut2YhwcD9BdXn/0NGoWJGFhUEaT0P19wGIiYE586F+YjkcgYp+0/zqwRpOalflJny2X0Oww2dtnA3BeSSlovsy/SGJrMiGHLt5k8yBL45/MyRIVIJR6kuEjJgcWlhPmwW/zlBSy3+lEyX+s8C/KzmAJu9Sm1k5ppiPQom0oGIEv9+/sblyykIFZfcVbGOHFFO6vVV3+dEC04Cm25YSJCKs/fgyJdCJnriDRpqYAOQ7cj3WliuybGgqlwCGUllJ8Pv3bklaNEnt5qxEasgCIOM0PI7kNLAEIGAhPA1WkFxdX4ni6th8OoHrK8nS0Gjr/W6vvxMbAyJ0te0m6mEPHf2Y5KktUgTvRb/3EOKZMpl+i/xpZ7vsKCkceMDIng7GhtkOfB8MFq9YwYfJgQrmmG+5udTLG2M1BCKL18NpJqID7N66QTiPkhxLF3c7pezy/aw== mail@or13.com"
+    }
+  }
+}
