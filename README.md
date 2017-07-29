@@ -7,13 +7,15 @@
 * [Provisioning a Docker Swarm with Azure Container ](https://www.youtube.com/watch?v=DPpQcmIM9Gs)
 
 
-## Azure Container Service Commands
+### Installing the Azure CLI
 
 ```
 $ conda create --name Oraclize-BioID
 $ source activate Oraclize-BioID
 $ pip install azure-cli==2.0.12
 ```
+
+### Preparing your Azure Container Service
 
 You will want to update `azuredeploy.parameters.json` before proceeding.
 
