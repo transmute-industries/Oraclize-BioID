@@ -29,7 +29,6 @@ $ az login
 $ az acs list
 $ az group create --name "ti-acs-swarm-rg" --location "southcentralus"
 $ az group deployment create -g ti-acs-swarm-rg -n ti-acs-swarm --template-uri https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-acs-swarm/azuredeploy.json --parameters ./azure/azuredeploy.parameters.json
-
 ```
 
 ### Establishing an SSH tunnel to your Azure Container Service
@@ -38,19 +37,19 @@ Before we proceed, please read this:
 
 ```
 These instructions focus on tunneling TCP traffic over SSH. 
-You can also start an interactive SSH session with one of the internal cluster management systems, but we don't recommend this. 
-Working directly on an internal system risks inadvertent configuration changes.
+You can also start an interactive SSH session with one of the internal cluster management systems, 
+but we don't recommend this. Working directly on an internal system risks inadvertent configuration changes.
 ```
 
 ```
-# ssh -fNL LOCAL_PORT:localhost:REMOTE_PORT -p 2200 [USERNAME]@[DNSPREFIX]mgmt.[REGION].cloudapp.azure.com
+# establish ssh tunnel for docker to use.
 $ ssh -fNL 2375:localhost:2375 -p 2200 or13@ti-acs-swarmmgmt.southcentralus.cloudapp.azure.com
 
-# if you encounter errors these may help
-# find what is using port 2375
+# if you encounter errors these may help find/kill what is using port 2375
 $ lsof -i :2375
 $ kill <PID>
 
+# configure docker to use the ssh tunnel
 $ export DOCKER_HOST=:2375
 ```
 
