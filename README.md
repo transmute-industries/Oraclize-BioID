@@ -4,9 +4,8 @@
 
 * [Azure CLI](https://github.com/Azure/azure-cli)
 * [Conda](https://www.continuum.io/downloads)
-
 * [Provisioning a Docker Swarm with Azure Container ](https://www.youtube.com/watch?v=DPpQcmIM9Gs)
-* [container-service-docker-swarm](https://docs.microsoft.com/en-us/azure/container-service/dcos-swarm/container-service-docker-swarm)
+
 
 ## Azure Container Service Commands
 
@@ -17,8 +16,6 @@ $ pip install azure-cli==2.0.12
 ```
 
 You will want to update `azuredeploy.parameters.json` before proceeding.
-
-Please watch [this](https://www.youtube.com/watch?v=DPpQcmIM9Gs&spfreload=10).
 
 You can find replace `ti-acs-swarm` to `your-app-acs-swarm`. Please omit this change in any PRs.
 
@@ -69,6 +66,6 @@ http://ti-acs-swarmagents.southcentralus.cloudapp.azure.com:8080/
 ### Further reading
 
 * [kubernetes-vs-docker-swarm-vs-dc-os](https://blog.netsil.com/kubernetes-vs-docker-swarm-vs-dc-os-may-2017-orchestrator-shootout-fdc59c28ec16)
+* [container-service-docker-swarm](https://docs.microsoft.com/en-us/azure/container-service/dcos-swarm/container-service-docker-swarm)
 * [Oraclize-Tutorial](https://github.com/johnhckuo/Oraclize-Tutorial)
 
-* [step-by-step-guide-deploying-docker-swarm-with-azure-container-service](http://cloudify.co/2016/11/22/step-by-step-guide-deploying-docker-swarm-with-azure-container-service.html)
