@@ -67,6 +67,8 @@ $ unset DOCKER_HOST
 
 > Remember to `export DOCKER_HOST=:2375` after setting up your ssh tunnel.
 
+You can use the scripts in bin to switch between azure container service and local docker swarm.
+
 ### Building / Starting your dockerized app
 
 ```
