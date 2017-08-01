@@ -7,10 +7,17 @@
   "scripts": {
     "start": "node server.js",
     "docker:build": "docker build -t oraclize_bioid_server .",
-    "docker:start": "docker run -p 8080:8080 -it oraclize_bioid_server"
+    "docker:start": "docker run -p 8080:8080 -it oraclize_bioid_server",
+    "config:azure": "export DOCKER_HOST=:2375",
+    "config:local": "unset DOCKER_HOST"
   },
   "dependencies": {
     "express": "^4.13.3",
-    "openid-client": "^1.12.0"
+    "js-sha3": "^0.6.1",
+    "moment": "^2.18.1",
+    "openid-client": "^1.12.0",
+    "querystring": "^0.2.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
   }
 }

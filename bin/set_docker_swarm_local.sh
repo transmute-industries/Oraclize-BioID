@@ -1,1 +1,0 @@
-unset DOCKER_HOST
