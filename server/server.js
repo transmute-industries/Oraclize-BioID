@@ -1,7 +1,9 @@
 'use strict';
 
 const express = require('express');
-const bioid = require('./lib/bioid')
+const bioid = require('./src/bioid')
+const ethereum = require('./src/ethereum')
+
 
 // Constants
 const PORT = 8080;
@@ -24,6 +26,14 @@ app.get('/', (req, res) => {
 });
 
 bioid.registerEndpoints(app);
+ethereum.registerEndpoints(app);
 
-app.listen(PORT, HOST);
+if(!module.parent){ 
+  app.listen(PORT, HOST);
+}
+
 console.log(`Running on http://${HOST}:${PORT}`);
+
+
+
+module.exports = app;
