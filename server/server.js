@@ -4,13 +4,13 @@ const express = require('express');
 const bioid = require('./src/bioid')
 const ethereum = require('./src/ethereum')
 
-
 // Constants
 const PORT = 8080;
 const HOST = '0.0.0.0';
 
 // App
 const app = express();
+app.use(require('body-parser').json());
 
 const moment = require('moment');
 
