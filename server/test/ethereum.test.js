@@ -12,15 +12,15 @@ chai.use(chaiHttp);
 let { web3, wallet } = require('../src/env')
 let { sign, recover } = require('../src/crypto')
 
-
 describe('Ethereum API Tests', () => {
     describe('Provider Tests', () => {
         it('sign and recover', (done) => {
             web3.eth.getAccounts(async (err, accounts) => {
                 // let signing_addr = accounts[0];
                 let signing_addr = "0x" + wallet.getAddress().toString("hex");
-                let signature = await sign(signing_addr, 'hello');
-                let addr = await recover(signing_addr, 'hello', signature);
+                let message = 'hello'
+                let signature = await sign(signing_addr, message);
+                let addr = await recover(signing_addr, message, signature);
                 // console.log(addr)
                 // console.log(signing_addr)
                 assert(addr === signing_addr)
@@ -29,29 +29,25 @@ describe('Ethereum API Tests', () => {
         })
     })
 
-    // describe('/api/v0/ecrecover', () => {
-
-    //     it('it should GET all the books', (done) => {
-    //         web3.eth.getAccounts(async (err, accounts) => {
-    //             let signing_addr = "0x" + wallet.getAddress().toString("hex");
-    //             let message_hash = web3.sha3('hello')
-    //             let signature = await sign(signing_addr, message_hash);
-
-    //             chai.request(server)
-    //                 .post('/api/v0/ecrecover')
-    //                 .send({
-    //                     account_address: signing_addr,
-    //                     message_hash: message_hash,
-    //                     signature: signature
-    //                 })
-    //                 .end((err, res) => {
-    //                     console.log(res.body)
-    //                     // res.should.have.status(200);
-    //                     // res.body.should.be.a('array');
-    //                     // res.body.length.should.be.eql(0);
-    //                     done();
-    //                 });
-    //         })
-    //     });
-    // });
+    describe('/api/v0/ecrecover', () => {
+        it('it should return success: true when message signature was signed by priv key for address', (done) => {
+            web3.eth.getAccounts(async (err, accounts) => {
+                let signing_addr = "0x" + wallet.getAddress().toString("hex");
+                let message = 'hello'
+                let signature = await sign(signing_addr, message);
+                chai.request(server)
+                    .post('/api/v0/ecrecover')
+                    .send({
+                        address: signing_addr,
+                        message: message,
+                        signature: signature
+                    })
+                    .end((err, res) => {
+                        // console.log(res.body)
+                        assert(res.body.recovered === signing_addr)
+                        done();
+                    });
+            })
+        });
+    });
 })

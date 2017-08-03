@@ -4,19 +4,16 @@ let { recover } = require('./crypto')
 
 const registerEndpoints = (app) => {
     app.post('/api/v0/ecrecover', async (req, res) => {
-
         let {
-            account_address,
-            message_hash,
+            address,
+            message,
             signature
         } = req.body;
-
-        let addr = await recover(account_address, message_hash, signature);
-
+        let recovered = await recover(address, message, signature);
         res.json({
-            addr,
-            account_address
-           
+            recovered,
+            address,
+            success: recovered === address
         })
     })
 }
