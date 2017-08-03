@@ -10,6 +10,7 @@
     "docker:start": "docker run -p 8080:8080 -it oraclize_bioid_server",
     "config:azure": "export DOCKER_HOST=:2375",
     "config:local": "unset DOCKER_HOST",
+    "tunnel": "ssh -fNL 2375:localhost:2375 -p 2200 or13@ti-acs-swarmmgmt.southcentralus.cloudapp.azure.com",
     "test": "mocha"
   },
   "dependencies": {

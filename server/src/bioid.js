@@ -40,6 +40,7 @@ const registerEndpoints = (app) => {
             login_url: process.env.APP_BASE_URL + '/api/v0/bioid/login',
             enrollment_url: process.env.APP_BASE_URL + '/api/v0/bioid/enrollment',
             verify_url: process.env.APP_BASE_URL + '/api/v0/bioid/verify',
+            identify_url: process.env.APP_BASE_URL + '/api/v0/bioid/identify',
             about: {
                 BCID: 'A BCID is the unique identifier used to store your biometric templates. It is how you are identified to our BioID Web Service (BWS), which has no additional knowledge about you to keep your biometrics anonymous.'
             }
@@ -72,9 +73,10 @@ const registerEndpoints = (app) => {
                 res.json(err);
             })
     });
+    // END BIO_ID CONNECT ENDPOINTS
+
 
     // BEGIN BIO ID WEB API ENDPOINTS
-
     app.get('/api/v0/bioid/enrollment', (req, res, next) => {
         var options = {
             uri: 'https://bws.bioid.com/extension/token',
@@ -154,6 +156,44 @@ const registerEndpoints = (app) => {
                 // console.error(err);
                 res.json(err)
             });
+    });
+
+    app.get('/api/v0/bioid/identify', (req, res, next) => {
+        var options = {
+            uri: 'https://bws.bioid.com/extension/token',
+            qs: {
+                id: process.env.BIO_ID_CLIENT_APP_ID,
+                task: 'identify',
+                livedetection: true,
+                autoenroll: true
+            },
+            headers: {
+                'Authorization': 'Basic ' + API_TOKEN
+            },
+            json: true // Automatically parses the JSON string in the response 
+        };
+        rp(options)
+            .then((bws_web_token) => {
+                let return_url = process.env.APP_BASE_URL + '/api/v0/bioid/result';
+                var qs = querystring.stringify({
+                    access_token: bws_web_token,
+                    return_url: return_url,
+                    state: 'wallet_address_here'
+                });
+                // console.log(qs);
+                var identify_url = 'https://www.bioid.com/bws/performtask?' + qs;
+                res.json({
+                    identify_url: identify_url
+                })
+                // res.redirect(enrollment_url, next);
+            })
+            .catch((err) => {
+                // throw err;
+                // console.error(err);
+                res.json(err)
+            });
+
+
     });
 
     app.get('/api/v0/bioid/result', (req, res, next) => {

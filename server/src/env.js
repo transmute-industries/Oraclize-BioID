@@ -7,7 +7,8 @@ var ProviderEngine = require("web3-provider-engine");
 var WalletSubprovider = require('web3-provider-engine/subproviders/wallet.js');
 var Web3Subprovider = require("web3-provider-engine/subproviders/web3.js");
 
-// // Get our mnemonic and create an hdwallet
+// THIS SHOULD BE SECRET!!!!!!
+// Get our mnemonic and create an hdwallet
 var mnemonic = "couch solve unique spirit wine fine occur rhythm foot feature glory away";
 var hdwallet = hdkey.fromMasterSeed(bip39.mnemonicToSeed(mnemonic));
 
@@ -15,7 +16,7 @@ var hdwallet = hdkey.fromMasterSeed(bip39.mnemonicToSeed(mnemonic));
 var wallet_hdpath = "m/44'/60'/0'/0/";
 var wallet = hdwallet.derivePath(wallet_hdpath + "0").getWallet();
 
-var providerUrl = "http://localhost:8545";
+var providerUrl = "http://testrpc:8545";
 var engine = new ProviderEngine();
 engine.addProvider(new WalletSubprovider(wallet, {}));
 engine.addProvider(new Web3Subprovider(new Web3.providers.HttpProvider(providerUrl)));

@@ -1,5 +1,10 @@
 version: '2'
 services:
+  testrpc:
+    image: dougvk/testrpc:latest
+    ports:
+      - "8545:8545"
+    command: bash -c "testrpc -h 0.0.0.0"
   server:
     build:
       context: ./server
@@ -8,3 +13,5 @@ services:
       - ./server/server.env
     ports:
       - "8080:8080"
+    links:
+      - testrpc
