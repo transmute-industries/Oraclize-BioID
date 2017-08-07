@@ -15,7 +15,6 @@ const BCID = 'bws/11424/123';
 const rp = require('request-promise');
 const querystring = require("querystring");
 
-
 Issuer.discover('https://account.bioid.com/connect/.well-known/openid-configuration')
     .then((bioIdIssuer) => {
         // console.log('Discovered bioIdIssuer %s', bioIdIssuer);
@@ -27,7 +26,6 @@ Issuer.discover('https://account.bioid.com/connect/.well-known/openid-configurat
         });
     });
 
-
 const registerEndpoints = (app) => {
     // https://www.npmjs.com/package/openid-client
     // https://github.com/panva/node-openid-client
@@ -37,7 +35,7 @@ const registerEndpoints = (app) => {
         res.json({
             BCID: BCID,
             profile_url: 'https://account.bioid.com/profile/',
-            login_url: process.env.APP_BASE_URL + '/api/v0/bioid/login',
+            // login_url: process.env.APP_BASE_URL + '/api/v0/bioid/login',
             enrollment_url: process.env.APP_BASE_URL + '/api/v0/bioid/enrollment',
             verify_url: process.env.APP_BASE_URL + '/api/v0/bioid/verify',
             identify_url: process.env.APP_BASE_URL + '/api/v0/bioid/identify',
@@ -47,33 +45,33 @@ const registerEndpoints = (app) => {
         });
     });
 
-    // BEGIN BIO_ID CONNECT ENDPOINTS
-    app.get('/api/v0/bioid/login', (req, res) => {
-        // after authenticating user will be redirected to /callback
-        var url = client.authorizationUrl({
-            redirect_uri: process.env.APP_BASE_URL + '/callback',
-            scope: 'openid',
-        });
-        res.redirect(url);
-    });
+    // // BEGIN BIO_ID CONNECT ENDPOINTS
+    // app.get('/api/v0/bioid/login', (req, res) => {
+    //     // after authenticating user will be redirected to /callback
+    //     var url = client.authorizationUrl({
+    //         redirect_uri: process.env.APP_BASE_URL + '/callback',
+    //         scope: 'openid',
+    //     });
+    //     res.redirect(url);
+    // });
 
-    app.get('/callback', (req, res) => {
-        // req.query === .../callback?code=XXX
-        client.authorizationCallback(process.env.APP_BASE_URL + '/callback', req.query)
-            .then((tokenSet) => {
-                console.log('received and validated tokens %j', tokenSet);
-                console.log('validated id_token claims %j', tokenSet.claims);
-                // Here we return the token set for the BioId OpenId Connect User.
-                res.json({
-                    tokenSet: tokenSet
-                });
-            })
-            .catch((err) => {
-                // console.error(err);
-                res.json(err);
-            })
-    });
-    // END BIO_ID CONNECT ENDPOINTS
+    // app.get('/callback', (req, res) => {
+    //     // req.query === .../callback?code=XXX
+    //     client.authorizationCallback(process.env.APP_BASE_URL + '/callback', req.query)
+    //         .then((tokenSet) => {
+    //             console.log('received and validated tokens %j', tokenSet);
+    //             console.log('validated id_token claims %j', tokenSet.claims);
+    //             // Here we return the token set for the BioId OpenId Connect User.
+    //             res.json({
+    //                 tokenSet: tokenSet
+    //             });
+    //         })
+    //         .catch((err) => {
+    //             // console.error(err);
+    //             res.json(err);
+    //         })
+    // });
+    // // END BIO_ID CONNECT ENDPOINTS
 
 
     // BEGIN BIO ID WEB API ENDPOINTS
@@ -103,8 +101,6 @@ const registerEndpoints = (app) => {
                 // console.log(qs);
                 var enrollment_url = 'https://www.bioid.com/bws/performtask?' + qs;
                 res.json({
-                    bws_web_token: bws_web_token,
-                    return_url: return_url,
                     enrollment_url: enrollment_url
                 })
                 // res.redirect(enrollment_url, next);
@@ -120,9 +116,6 @@ const registerEndpoints = (app) => {
 
 
     app.get('/api/v0/bioid/verify', (req, res, next) => {
-
-        console.log('verify query: ', req.query);
-
         var options = {
             uri: 'https://bws.bioid.com/extension/token',
             qs: {
@@ -159,8 +152,6 @@ const registerEndpoints = (app) => {
     });
 
     app.get('/api/v0/bioid/identify', (req, res, next) => {
-        console.log('identify query: ', req.query);
-
         var options = {
             uri: 'https://bws.bioid.com/extension/token',
             qs: {
@@ -194,10 +185,6 @@ const registerEndpoints = (app) => {
     });
 
     app.get('/api/v0/bioid/result', (req, res, next) => {
-        console.log(req)
-        console.log('result query: ', req.query);
-        console.log('result access_token: ', req.query.access_token);
-        // https://{bws-instance}.bioid.com/extension/result?access_token={token}
         var options = {
             uri: 'https://bws.bioid.com/extension/result',
             qs: {

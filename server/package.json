@@ -28,6 +28,7 @@
     "querystring": "^0.2.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
+    "transmute-framework": "^0.1.40",
     "web3-provider-engine": "^13.2.9"
   }
 }

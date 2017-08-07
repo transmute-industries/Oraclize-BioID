@@ -1,6 +1,5 @@
 
-
-let { recover } = require('./crypto')
+let TF = require('./transmute')
 
 const registerEndpoints = (app) => {
     app.post('/api/v0/ecrecover', async (req, res) => {
@@ -9,7 +8,7 @@ const registerEndpoints = (app) => {
             message,
             signature
         } = req.body;
-        let recovered = await recover(address, message, signature);
+        let recovered = await TF.Toolbox.recover(address, message, signature);
         res.json({
             recovered,
             address,
