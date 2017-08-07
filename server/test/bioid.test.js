@@ -14,13 +14,12 @@ let TF = require('../src/transmute')
 
 const BASE_URL = process.env.APP_BASE_URL || 'http://localhost:8080'
 
+describe('BioID API Tests', () => {
 
-describe.only('BioID API Tests', () => {
-
-    const getActionURL = (payload) => {
+    const getActionURL = (url, payload) => {
         return new Promise((resolve, reject) => {
             chai.request(server)
-                .post('/api/v0/bioid/mock/action')
+                .post(url)
                 .send(payload)
                 .end((err, res) => {
                     if (err) {
@@ -47,7 +46,7 @@ describe.only('BioID API Tests', () => {
     }
 
     it('Mock Enrollment', async () => {
-        let { url } = await getActionURL({
+        let { url } = await getActionURL('/api/v0/bioid/mock/action', {
             bcid: 'bws/11424/123',
             id: 'XYZ',
             task: 'enroll',
@@ -61,7 +60,7 @@ describe.only('BioID API Tests', () => {
     });
 
     it('Mock Verification', async () => {
-        let { url } = await getActionURL({
+        let { url } = await getActionURL('/api/v0/bioid/mock/action', {
             bcid: 'bws/11424/123',
             id: 'XYZ',
             task: 'verify',
