@@ -82,6 +82,11 @@ http://ti-acs-swarmagents.southcentralus.cloudapp.azure.com:8080/
 
 ```
 
+
+### Advanced
+
+You may find it convenient to use ngrok to debug locally running services that require internet callbacks.
+
 ### Further reading
 
 * [kubernetes-vs-docker-swarm-vs-dc-os](https://blog.netsil.com/kubernetes-vs-docker-swarm-vs-dc-os-may-2017-orchestrator-shootout-fdc59c28ec16)

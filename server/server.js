@@ -1,5 +1,7 @@
 'use strict';
 
+require('dotenv').config({path: './server.env'})
+
 const express = require('express');
 
 
@@ -13,22 +15,24 @@ app.use(require('body-parser').json());
 
 const moment = require('moment');
 
+const BASE_URL = process.env.APP_BASE_URL
+
 app.get('/', (req, res) => {
   res.json({
-    // base_url: process.env.APP_BASE_URL,
-    // bioid_url: process.env.APP_BASE_URL + '/api/v0/bioid',
-    // privacy: 'This app is for demo purposes.',
-    // terms: 'This app is for demo purposes.',
-    // contact: 'hello@transmute.industries',
-    // now: moment().format('LLL')
+    bioid_url: BASE_URL + '/api/v0/bioid',
+    privacy: 'This app is for demo purposes.',
+    terms: 'This app is for demo purposes.',
+    contact: 'hello@transmute.industries',
+    now: moment().format('LLL')
   });
 });
 
-// require('./src/bioid').registerEndpoints(app); OLD
-require('./src/bioid/mock').registerEndpoints(app);
+require('./src/bioid').registerEndpoints(app); 
+// require('./src/bioid/mock').registerEndpoints(app);
+// require('./src/bioid/api').registerEndpoints(app);
 require('./src/ethereum').registerEndpoints(app);
 
-if(!module.parent){ 
+if (!module.parent) {
   app.listen(PORT, HOST);
 }
 
