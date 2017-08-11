@@ -1,0 +1,6 @@
+node_modules
+coverage
+build
+src/contracts
+
+sigmate-v3-ti.json

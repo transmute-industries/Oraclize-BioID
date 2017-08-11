@@ -1,3 +1,7 @@
 server/node_modules
 
 server/server.env
+
+sigmate-v3-ti.json
+
+environment.env
