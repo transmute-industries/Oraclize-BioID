@@ -2,6 +2,7 @@
 require('es6-promise').polyfill();
 const fetch = require('isomorphic-fetch');
 const querystring = require("querystring");
+const _ = require('lodash');
 
 const API_TOKEN = (new Buffer(process.env.BIO_ID_CLIENT_APP_ID + ':' + process.env.BIO_ID_CLIENT_APP_SECRET)).toString('base64');
 const BASE_URL = process.env.APP_BASE_URL || 'http://ngrok.transmute.industries'
@@ -45,12 +46,8 @@ const getResult = (access_token) => {
                         error: await response.text()
                     });
                 } else {
-                    // console.log(response)
-                    // convert to text in case no content...
-                    let data = await response.text();
-                    resolve({
-                        data: data
-                    });
+                    let data = await response.json();
+                    resolve(data);
                 }
             });
     });
@@ -59,18 +56,20 @@ const getResult = (access_token) => {
 const registerEndpoints = (app) => {
 
     app.get('/api/v0/bioid', (req, res) => {
-        // console.log('bioid')
-        // bws/11424/Class-ID
-        // Here we need to tie the biometic operations to an external identifier...
-        // the 123 is the external identifier...
-        let app_callback = BASE_URL + '/api/v0/bioid/app_callback';
+        let app_callback_url = BASE_URL + '/api/v0/bioid/app_callback';
         let bcid = 'bws/11424/1234';
+         // bws/11424/Class-ID
+        // Here we need to tie the biometic operations to an external identifier...
+        // the 1234 is the external identifier...
+        // we pass it as a get parameter.
+        let encrypted_state = '0xdeadbeef'
+        let test_params = `bcid=${bcid}&app_callback_url=${app_callback_url}&encrypted_state=${encrypted_state}`
         res.json({
             BCID: bcid,
             profile_url: 'https://account.bioid.com/profile/',
-            enroll: BASE_URL + `/api/v0/bioid/action?bcid=${bcid}&task=enroll&app_callback_url=${app_callback}`,
-            verify: BASE_URL + `/api/v0/bioid/action?bcid=${bcid}&task=verify&app_callback_url=${app_callback}`,
-            identify: BASE_URL + `/api/v0/bioid/action?bcid=${bcid}&task=identify&app_callback_url=${app_callback}`,
+            enroll: BASE_URL + `/api/v0/bioid/action?task=enroll&${test_params}`,
+            verify: BASE_URL + `/api/v0/bioid/action?task=verify&${test_params}`,
+            identify: BASE_URL + `/api/v0/bioid/action?task=identify&${test_params}`,
             about: {
                 BCID: 'A BCID is the unique identifier used to store your biometric templates. It is how you are identified to our BioID Web Service (BWS), which has no additional knowledge about you to keep your biometrics anonymous.'
             }
@@ -78,31 +77,39 @@ const registerEndpoints = (app) => {
     });
 
     app.get('/api/v0/bioid/action', async (req, res) => {
-        // console.log('bioid')
         let access_token = await getToken({
             id: process.env.BIO_ID_CLIENT_APP_ID,
             bcid: req.query.bcid,
             task: req.query.task,
-            livedetection: true,
-            challenge: true
+            // These are for providing additional security
+            // livedetection: true,
+            // challenge: true
             // autoenroll: true
         })
         res.json({
             [req.query.task]: 'https://www.bioid.com/bws/performtask?' + querystring.stringify({
                 access_token: access_token,
                 return_url: BASE_URL + '/api/v0/bioid/result',
-                state: 'encrypted_state_here'
+                state: (new Buffer(JSON.stringify({
+                    encrypted_state: '',
+                    app_callback_url: req.query.app_callback_url
+                })).toString('base64'))
             })
         });
     });
 
     app.get('/api/v0/bioid/result', async (req, res, next) => {
         let result = await getResult(req.query.access_token);
-        res.json({
-            result: result,
-            query: req.query
+        let state = JSON.parse(new Buffer(req.query.state, 'base64').toString('ascii'));
+        let augmented_result = _.extend(result, {
+            encrypted_state: state.encrypted_state
         });
-
+        delete augmented_result['Matches']
+        // Here we don't want to return matches to the client, but we might care to inspect them
+        // and do something nice if confidence is low 
+        // augmented_result.Matches = (new Buffer(JSON.stringify(augmented_result.Matches)).toString('base64'))
+        let callback_url = state.app_callback_url + '?' + querystring.stringify(result)
+        res.redirect(callback_url);
     });
 
     app.get('/api/v0/bioid/app_callback', async (req, res, next) => {

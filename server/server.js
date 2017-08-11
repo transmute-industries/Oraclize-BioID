@@ -27,9 +27,7 @@ app.get('/', (req, res) => {
   });
 });
 
-require('./src/bioid').registerEndpoints(app); 
-// require('./src/bioid/mock').registerEndpoints(app);
-// require('./src/bioid/api').registerEndpoints(app);
+require('./src/bioid/bioid').registerEndpoints(app); 
 require('./src/ethereum').registerEndpoints(app);
 
 if (!module.parent) {
