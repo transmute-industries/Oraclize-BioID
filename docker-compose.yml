@@ -7,7 +7,7 @@ services:
       - ./environment.env
     ports:
       - "8545:8545"
-    command: bash -c "testrpc -h 0.0.0.0 -m $WALLET_MNEUMONIC"
+    command: bash -c "testrpc -h 0.0.0.0 -m 'divert spare attend review reveal satisfy diagram type afraid annual swim style'"
   
   ipfs:
     build: ./ipfs
@@ -27,18 +27,18 @@ services:
     env_file:
       - ./environment.env
     ports:
-      - "8080:8080"
+      - "3001:3001"
     links:
       - testrpc
 
   dapp:
     build:
-      context: .
+      context: ./dapp
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
-     - ./src:/usr/src/app/src
+     - ./dapp/src:/usr/src/app/src
     links:
      - ipfs
      - testrpc

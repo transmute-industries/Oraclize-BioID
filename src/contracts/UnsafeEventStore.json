@@ -1,0 +1,262 @@
+{
+  "contract_name": "UnsafeEventStore",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "creator",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_eventType",
+          "type": "bytes32"
+        },
+        {
+          "name": "_keyType",
+          "type": "bytes1"
+        },
+        {
+          "name": "_valueType",
+          "type": "bytes1"
+        },
+        {
+          "name": "_key",
+          "type": "bytes32"
+        },
+        {
+          "name": "_value",
+          "type": "bytes32"
+        }
+      ],
+      "name": "writeEvent",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "kill",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "eventCount",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_eventId",
+          "type": "uint256"
+        }
+      ],
+      "name": "readEvent",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "name": "",
+          "type": "bytes1"
+        },
+        {
+          "name": "",
+          "type": "bytes1"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": true,
+      "type": "constructor"
+    },
+    {
+      "payable": true,
+      "type": "fallback"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "Id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "TxOrigin",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "Created",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "EventType",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "KeyType",
+          "type": "bytes1"
+        },
+        {
+          "indexed": false,
+          "name": "ValueType",
+          "type": "bytes1"
+        },
+        {
+          "indexed": false,
+          "name": "Key",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "Value",
+          "type": "bytes32"
+        }
+      ],
+      "name": "EsEvent",
+      "type": "event"
+    }
+  ],
+  "unlinked_binary": "0x60606040525b5b60008054600160a060020a03191633600160a060020a03161790555b60028054600160a060020a03191632600160a060020a03161790555b5b6104598061004e6000396000f300606060405236156100675763ffffffff60e060020a60003504166302d05d3f811461007457806335628b38146100a357806341c0e1b5146100fc57806371be2e4a146101115780638da5cb5b14610136578063e1ba30a914610165578063f2fde38b146101ec575b6100725b600080fd5b565b005b341561007f57600080fd5b61008761020d565b604051600160a060020a03909116815260200160405180910390f35b34156100ae57600080fd5b6100ea6004357fff000000000000000000000000000000000000000000000000000000000000006024358116906044351660643560843561021c565b60405190815260200160405180910390f35b341561010757600080fd5b6100726102e4565b005b341561011c57600080fd5b6100ea6102f4565b60405190815260200160405180910390f35b341561014157600080fd5b6100876102fb565b604051600160a060020a03909116815260200160405180910390f35b341561017057600080fd5b61017b60043561030a565b604051978852600160a060020a03909616602088015260408088019590955260608701939093527fff0000000000000000000000000000000000000000000000000000000000000091821660808701521660a085015260c084015260e0830191909152610100909101905180910390f35b34156101f757600080fd5b610072600160a060020a03600435166103d8565b005b600254600160a060020a031681565b600073__EventStoreLib_________________________633bb642036001888888888860006040516020015260405160e060020a63ffffffff8916028152600481019690965260248601949094527fff00000000000000000000000000000000000000000000000000000000000000928316604486015291166064840152608483015260a482015260c40160206040518083038186803b15156102be57600080fd5b6102c65a03f415156102cf57600080fd5b50505060405180519150505b95945050505050565b600054600160a060020a0316ff5b565b6001545b90565b600054600160a060020a031681565b60008060008060008060008073__EventStoreLib_________________________63a057fd5e60018b6000604051610100015260405160e060020a63ffffffff8516028152600481019290925260248201526044016101006040518083038186803b151561037757600080fd5b6102c65a03f4151561038857600080fd5b50505060405180519060200180519060200180519060200180519060200180519060200180519060200180519060200180519050975097509750975097509750975097505b919395975091939597565b60005433600160a060020a039081169116141561042757600160a060020a03811615610427576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a723058206bd852253719be3def8ac7a20df0bf57009cee576c042e23e7461700caa5083c0029",
+  "networks": {
+    "1502426173017": {
+      "events": {
+        "0x34fda208d95da3b89ce2ca6e488201282198f339ef139dd80138a430c8d03a24": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "Id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "TxOrigin",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "Created",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "EventType",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "KeyType",
+              "type": "bytes1"
+            },
+            {
+              "indexed": false,
+              "name": "ValueType",
+              "type": "bytes1"
+            },
+            {
+              "indexed": false,
+              "name": "Key",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "Value",
+              "type": "bytes32"
+            }
+          ],
+          "name": "EsEvent",
+          "type": "event"
+        }
+      },
+      "links": {
+        "EventStoreLib": "0x78a7e6af6b08bf0cf6de3123a9193ff581f5c855"
+      },
+      "address": "0x4058535b5ee47b0f94cb46283ca25011502d7476",
+      "updated_at": 1502426190196
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1502426190196
+}
