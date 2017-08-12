@@ -31,15 +31,15 @@ services:
     links:
       - testrpc
 
-  dapp:
-    build:
-      context: ./dapp
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    volumes:
-     - ./dapp/src:/usr/src/app/src
-    links:
-     - ipfs
-     - testrpc
-     - server
+  # dapp:
+  #   build:
+  #     context: ./dapp
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #    - ./dapp/src:/usr/src/app/src
+  #   links:
+  #    - ipfs
+  #    - testrpc
+  #    - server

@@ -1,6 +1,6 @@
 'use strict';
 
-require('dotenv').config({path: './server.env'})
+require('dotenv').config({path: '../environment.env'})
 
 const express = require('express');
 
@@ -16,6 +16,12 @@ app.use(require('body-parser').json());
 const moment = require('moment');
 
 const BASE_URL = process.env.APP_BASE_URL
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.get('/', (req, res) => {
   res.json({

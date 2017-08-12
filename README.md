@@ -87,6 +87,22 @@ http://ti-acs-swarmagents.southcentralus.cloudapp.azure.com:8080/
 
 You may find it convenient to use ngrok to debug locally running services that require internet callbacks.
 
+example config:
+
+```
+tunnels:
+  dev:
+    addr: 3001
+    proto: http
+    hostname: ngrok.transmute.industries
+```
+
+start the local host tunnel:
+
+```
+$ ngrok start dev
+```
+
 ### Further reading
 
 * [kubernetes-vs-docker-swarm-vs-dc-os](https://blog.netsil.com/kubernetes-vs-docker-swarm-vs-dc-os-may-2017-orchestrator-shootout-fdc59c28ec16)

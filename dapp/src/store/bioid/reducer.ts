@@ -1,28 +1,25 @@
 
 
-function getParameterByName(name: any, url: any) {
-  if (!url) url = window.location.href;
-  name = name.replace(/[\[\]]/g, "\\$&");
-  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-    results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, " "));
+
+
+const getSearchObject = (searchFromLocation: string) => {
+  var search = location.search.substring(1);
+  return search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
+    (key, value) => { return key === "" ? value : decodeURIComponent(value) }) : {}
 }
+
 
 const handlers = {
   ['@@router/LOCATION_CHANGE']: (state: any, action: any) => {
-    let bcid = getParameterByName('bcid', action.payload.search)
-    return {
-      ...state,
-      bcid: bcid
-    };
-  },
-  ['BCID_RECEIVED']: (state: any, action: any) => {
-    return {
-      ...state,
-      bcid: action.payload.bcid,
-    };
+    let searchObject = getSearchObject(action.payload.search)
+    let containsAction = ['enrollment', 'verification', 'identification'].indexOf(searchObject.Action) !== -1;
+    if (containsAction && searchObject.Success == 'true') {
+      return {
+        ...state,
+        bcid: searchObject.BCID
+      };
+    }
+    return state;
   }
 };
 
@@ -30,10 +27,14 @@ export const reducer = (state: any, action: any) => {
   if (handlers[action.type]) {
     return handlers[action.type](state, action);
   }
-  return {
+  state = {
     bcid: null,
     ...state
   };
+
+  console.log('bioid :', state)
+
+  return state;
 };
 
 export default {

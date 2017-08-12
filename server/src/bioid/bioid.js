@@ -87,11 +87,11 @@ const registerEndpoints = (app) => {
             // autoenroll: true
         })
         res.json({
-            [req.query.task]: 'https://www.bioid.com/bws/performtask?' + querystring.stringify({
+            ['action_url']: 'https://www.bioid.com/bws/performtask?' + querystring.stringify({
                 access_token: access_token,
                 return_url: BASE_URL + '/api/v0/bioid/result',
                 state: (new Buffer(JSON.stringify({
-                    encrypted_state: '',
+                    encrypted_state: req.query.encrypted_state,
                     app_callback_url: req.query.app_callback_url
                 })).toString('base64'))
             })
@@ -107,8 +107,21 @@ const registerEndpoints = (app) => {
         delete augmented_result['Matches']
         // Here we don't want to return matches to the client, but we might care to inspect them
         // and do something nice if confidence is low 
-        // augmented_result.Matches = (new Buffer(JSON.stringify(augmented_result.Matches)).toString('base64'))
-        let callback_url = state.app_callback_url + '?' + querystring.stringify(result)
+    
+        // Here we should also look at encrypted_state.
+        // We probably want to use an HD wallet + framework to sign a transaction related to this operation.
+        // Then we will be storing our biometric challenge result using a wallet.
+        
+        // We can also store such a transaction as a 3rd party (no need to share access to the wallet, 
+        // only need to prove control via ecrecover)
+
+        // CRITICAL: This is were the entire security of the binding needs to occur.
+        // the client should be untrusted.
+
+        // Obviously, if token theft occurs an attacker can use this API to 
+        // claim biometric identities via arbitrary wallets
+
+        let callback_url = state.app_callback_url + '?' + querystring.stringify(augmented_result)
         res.redirect(callback_url);
     });
 

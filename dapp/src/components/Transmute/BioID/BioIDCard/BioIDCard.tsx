@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import {
-    enroll,
+    biometricAction,
 } from '../../../../store/bioid/actions';
 
 export class BioIDCard extends React.Component<any, any> {
@@ -26,32 +26,48 @@ export class BioIDCard extends React.Component<any, any> {
                 </CardTitle>
                 <CardText>
                     Current status here...
+
+                    Need to prevent URL pollution, callback url should always exclude query string.
                 </CardText>
                 <CardActions>
                     <RaisedButton
                         label="Enroll"
                         onTouchTap={() => {
                             this.props.dispatch(
-                              enroll()
+                              biometricAction({
+                                  task: 'enroll',
+                                  bcid: 'bws/11424/1234',
+                                  app_callback_url: window.location.href,
+                                  encrypted_state: '0xdeadbeef'
+                              })
                             );
-                            {/* createEventStore(this.props.transmute.defaultAddress) */}
                         }}
                     />
                     <RaisedButton
                         label="Verify"
                         onTouchTap={() => {
-                            {/* this.props.dispatch(
-                            
-                            ); */}
+                           this.props.dispatch(
+                              biometricAction({
+                                  task: 'verify',
+                                  bcid: 'bws/11424/1234',
+                                  app_callback_url: window.location.href,
+                                  encrypted_state: '0xdeadbeef'
+                              })
+                            );
                         }}
                     />
                     <RaisedButton
                         label="Identify"
                        
                         onTouchTap={() => {
-                            {/* this.props.dispatch(
-                               
-                            ); */}
+                            this.props.dispatch(
+                              biometricAction({
+                                  task: 'identify',
+                                  bcid: 'bws/11424/1234',
+                                  app_callback_url: window.location.href,
+                                  encrypted_state: '0xdeadbeef'
+                              })
+                            );
                         }}
                     />
                 </CardActions>

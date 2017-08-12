@@ -2,13 +2,16 @@
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
-// http://ti-acs-swarmagents.southcentralus.cloudapp.azure.com:8080
-let bioid_api_base = 'http://example.com';
+const querystring = require("querystring");
 
-export const enroll = () => {
-    let url = bioid_api_base + '/api/v0/bioid/enrollment'
+// http://ti-acs-swarmagents.southcentralus.cloudapp.azure.com:8080
+// let bioid_api_base = 'http://localhost:3001';
+let bioid_api_base = 'http://ngrok.transmute.industries';
+
+export const biometricAction = (payload: any) => {
+    let url = bioid_api_base + '/api/v0/bioid/action?' +  querystring.stringify(payload);
     return fetch(url, {
-        method: 'POST',
+        method: 'GET',
     })
         .then((response: any) => {
             if (response.status >= 400) {
@@ -19,5 +22,5 @@ export const enroll = () => {
 }
 
 export default {
-    enroll
+    biometricAction
 }
