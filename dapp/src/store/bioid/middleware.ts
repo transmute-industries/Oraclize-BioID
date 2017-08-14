@@ -9,7 +9,7 @@ const querystring = require("querystring");
 let bioid_api_base = 'http://ngrok.transmute.industries';
 
 export const biometricAction = (payload: any) => {
-    let url = bioid_api_base + '/api/v0/bioid/action?' +  querystring.stringify(payload);
+    let url = bioid_api_base + '/api/v0/bioid/action?' + querystring.stringify(payload);
     return fetch(url, {
         method: 'GET',
     })
@@ -21,6 +21,29 @@ export const biometricAction = (payload: any) => {
         })
 }
 
+
+export const firebaseSignatureBiometricChallenge = (payload: any) => {
+    let url = bioid_api_base + '/api/v0/firebase-signature-biometric-challenge';
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    })
+        .then((response: any) => {
+            if (response.status >= 400) {
+                throw new Error("Bad response from server");
+            }
+            return response.json();
+        })
+}
+
+
+
+
 export default {
-    biometricAction
+    biometricAction,
+    firebaseSignatureBiometricChallenge
 }

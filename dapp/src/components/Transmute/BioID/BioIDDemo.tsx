@@ -17,8 +17,8 @@ class BioIDDemo extends React.Component<any, any> {
           <Row>
             <Col xs={12} sm={12}>
               <LightWalletCard />
-              <SelectEventStoreCard />
               <BioIDCard />
+              <SelectEventStoreCard />
                {/* 
               <AuditLogCard /> */}
             </Col>

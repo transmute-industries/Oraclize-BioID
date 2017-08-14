@@ -1,9 +1,9 @@
 'use strict';
 
+// be carefull.. relative paths will make you sad
 require('dotenv').config({path: '../environment.env'})
 
 const express = require('express');
-
 
 // Constants
 const PORT = 3001;
@@ -33,8 +33,8 @@ app.get('/', (req, res) => {
   });
 });
 
-require('./src/bioid/bioid').registerEndpoints(app); 
-require('./src/ethereum').registerEndpoints(app);
+// require('./src/bioid/bioid').registerEndpoints(app); 
+require('./src/firebase-token/firebase-token').registerEndpoints(app); 
 
 if (!module.parent) {
   app.listen(PORT, HOST);

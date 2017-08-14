@@ -22,7 +22,7 @@ const initMneumonicWallet = () => {
     TransmuteFramework.init(config);
 }
 
-const getJWTForAddress = async () => {
+const checkMessageSignature = async () => {
     let signature = await Toolbox.sign(address, 'hello');
     let signature_address = await Toolbox.recover(address, 'hello', signature);
     let isMessageSignatureValid = signature_address === address;
@@ -32,7 +32,7 @@ const getJWTForAddress = async () => {
 const generateToken = () => {
     var uid = '0x01';
     var additionalClaims = {
-        // premiumAccount: true,
+        // bcid: '',
         address: '0x0'
     };
     var token = admin.auth().createCustomToken(uid, additionalClaims);

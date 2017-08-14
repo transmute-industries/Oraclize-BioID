@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import {
     biometricAction,
+    firebaseSignatureBiometricChallenge
 } from '../../../../store/bioid/actions';
 
 export class BioIDCard extends React.Component<any, any> {
@@ -20,7 +21,7 @@ export class BioIDCard extends React.Component<any, any> {
     }
     render() {
         return (
-            <Card style={{marginTop: '32px', marginBottom: '32px'}}>
+            <Card style={{ marginTop: '32px', marginBottom: '32px' }}>
                 <CardTitle>
                     BioID
                 </CardTitle>
@@ -34,39 +35,39 @@ export class BioIDCard extends React.Component<any, any> {
                         label="Enroll"
                         onTouchTap={() => {
                             this.props.dispatch(
-                              biometricAction({
-                                  task: 'enroll',
-                                  bcid: 'bws/11424/1234',
-                                  app_callback_url: window.location.href,
-                                  encrypted_state: '0xdeadbeef'
-                              })
+                                firebaseSignatureBiometricChallenge({
+                                    address: this.props.transmute.lightWalletAddress,
+                                    task: 'enroll',
+                                    bcid: 'bws/11424/1234',
+                                    app_callback_url: window.location.href
+                                })
                             );
                         }}
                     />
                     <RaisedButton
                         label="Verify"
                         onTouchTap={() => {
-                           this.props.dispatch(
-                              biometricAction({
-                                  task: 'verify',
-                                  bcid: 'bws/11424/1234',
-                                  app_callback_url: window.location.href,
-                                  encrypted_state: '0xdeadbeef'
-                              })
+                            this.props.dispatch(
+                                firebaseSignatureBiometricChallenge({
+                                    address: this.props.transmute.lightWalletAddress,
+                                    task: 'verify',
+                                    bcid: 'bws/11424/1234',
+                                    app_callback_url: window.location.href
+                                })
                             );
                         }}
                     />
                     <RaisedButton
                         label="Identify"
-                       
+
                         onTouchTap={() => {
                             this.props.dispatch(
-                              biometricAction({
-                                  task: 'identify',
-                                  bcid: 'bws/11424/1234',
-                                  app_callback_url: window.location.href,
-                                  encrypted_state: '0xdeadbeef'
-                              })
+                                biometricAction({
+                                    task: 'identify',
+                                    bcid: 'bws/11424/1234',
+                                    app_callback_url: window.location.href,
+                                    encrypted_state: '0xdeadbeef'
+                                })
                             );
                         }}
                     />
