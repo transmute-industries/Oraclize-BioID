@@ -4,6 +4,8 @@
 const TransmuteFramework = require('../src/transmute');
 const { Toolbox } = TransmuteFramework;
 const admin = require("firebase-admin");
+const moment = require('moment');
+const keccak256 = require('js-sha3').keccak256;
 
 const serviceAccount = require('../../transmute-industries-firebase-adminsdk-qfd5b-9e6a8cc6c8.json');
 
@@ -23,8 +25,13 @@ const initMneumonicWallet = () => {
 }
 
 const checkMessageSignature = async () => {
-    let signature = await Toolbox.sign(address, 'hello');
-    let signature_address = await Toolbox.recover(address, 'hello', signature);
+
+    let timestamp = moment().unix();
+    let challenge = keccak256(`${address}:${timestamp}`);
+    let expires = moment().add(10, 'minutes').unix();
+
+    let signature = await Toolbox.sign(address, challenge);
+    let signature_address = await Toolbox.recover(address, challenge, signature);
     let isMessageSignatureValid = signature_address === address;
     console.log('isMessageSignatureValid: ', isMessageSignatureValid)
 }
@@ -39,7 +46,7 @@ const generateToken = () => {
     console.log(token)
 }
 
-// initMneumonicWallet()
-// getJWTForAddress()
+initMneumonicWallet()
+checkMessageSignature()
 
-generateToken()
+// generateToken()

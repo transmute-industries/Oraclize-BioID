@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import {
-    biometricAction,
     firebaseSignatureBiometricChallenge
 } from '../../../../store/bioid/actions';
 
@@ -39,7 +38,7 @@ export class BioIDCard extends React.Component<any, any> {
                                     address: this.props.transmute.lightWalletAddress,
                                     task: 'enroll',
                                     bcid: 'bws/11424/1234',
-                                    app_callback_url: window.location.href
+                                    app_callback_url: window.location.origin + window.location.pathname
                                 })
                             );
                         }}
@@ -52,7 +51,7 @@ export class BioIDCard extends React.Component<any, any> {
                                     address: this.props.transmute.lightWalletAddress,
                                     task: 'verify',
                                     bcid: 'bws/11424/1234',
-                                    app_callback_url: window.location.href
+                                    app_callback_url: window.location.origin + window.location.pathname
                                 })
                             );
                         }}
@@ -62,11 +61,11 @@ export class BioIDCard extends React.Component<any, any> {
 
                         onTouchTap={() => {
                             this.props.dispatch(
-                                biometricAction({
+                                firebaseSignatureBiometricChallenge({
+                                    address: this.props.transmute.lightWalletAddress,
                                     task: 'identify',
                                     bcid: 'bws/11424/1234',
-                                    app_callback_url: window.location.href,
-                                    encrypted_state: '0xdeadbeef'
+                                    app_callback_url: window.location.origin + window.location.pathname
                                 })
                             );
                         }}

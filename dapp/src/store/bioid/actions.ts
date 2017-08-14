@@ -19,7 +19,7 @@ export const firebaseSignatureBiometricChallenge = (payload: any) => async (disp
     // signature should occur hear, then redirect to the completed action_url
     let action_url_with_sig = action_url + '&signature=' + signature
     console.log(action_url_with_sig)
-    // window.location.href = action_url_with_sig
+    window.location.href = action_url_with_sig
 }
 
 export default {

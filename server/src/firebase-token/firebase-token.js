@@ -12,6 +12,9 @@ const BASE_URL = process.env.APP_BASE_URL || 'http://ngrok.transmute.industries'
 
 const serviceAccount = require('../../../transmute-industries-firebase-adminsdk-qfd5b-9e6a8cc6c8.json');
 
+const TransmuteFramework = require('../transmute');
+const { Toolbox } = TransmuteFramework;
+
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://transmute-industries.firebaseio.com"
@@ -42,16 +45,35 @@ const registerEndpoints = (app) => {
     app.get('/api/v0/bioid', (req, res) => {
         let app_callback_url = BASE_URL + '/api/v0/bioid/app_callback';
         let bcid = 'bws/11424/1234';
-        // bws/11424/Class-ID
-        // Here we need to tie the biometic operations to an external identifier...
-        // the 1234 is the external identifier...
-        // we pass it as a get parameter.
-        let signature = '0xdeadbeef'
-        let test_params = `bcid=${bcid}&app_callback_url=${app_callback_url}&signature=${signature}`
+
+        let mnemonic = 'divert spare attend review reveal satisfy diagram type afraid annual swim style';
+        let config = TransmuteFramework.config;
+        config.wallet = Toolbox.getWalletFromMnemonic(mnemonic);
+        let address = Toolbox.getDefaultAddressFromWallet(config.wallet);
+        TransmuteFramework.init(config);
+
         res.json({
-            enroll: BASE_URL + `/api/v0/bioid/action?task=enroll&${test_params}`,
-            verify: BASE_URL + `/api/v0/bioid/action?task=verify&${test_params}`,
-            identify: BASE_URL + `/api/v0/bioid/action?task=identify&${test_params}`,
+            enroll: BASE_URL + `/api/v0/bioid/action?` + querystring.stringify({
+                task: 'enroll',
+                bcid: bcid,
+                address: address,
+                signature: '0xdeadbeef',
+                app_callback_url: app_callback_url
+            }),
+            verify: BASE_URL + `/api/v0/bioid/action?` + querystring.stringify({
+                task: 'verify',
+                bcid: bcid,
+                address: address,
+                signature: '0xdeadbeef',
+                app_callback_url: app_callback_url
+            }),
+            identify: BASE_URL + `/api/v0/bioid/action?` + querystring.stringify({
+                task: 'identify',
+                bcid: bcid,
+                address: address,
+                signature: '0xdeadbeef',
+                app_callback_url: app_callback_url
+            }),
         });
     });
 
@@ -63,15 +85,14 @@ const registerEndpoints = (app) => {
             app_callback_url
         } = req.body;
 
-        if (['enroll', 'verify'].indexOf(task) === -1) {
-            throw Error('Only enroll or verify are supported for signature challenges.')
-        }
-
-        // console.log(req.body)
+        // if (['enroll', 'verify'].indexOf(task) === -1) {
+        //     throw Error('Only enroll or verify are supported for signature challenges.')
+        // }
 
         let timestamp = moment().unix();
-        let challenge = keccak256(`${address}:${timestamp}`);
+        let challenge = `${address}:${timestamp}`
         let expires = moment().add(10, 'minutes').unix();
+
         let ref = db.ref(`challenge/${address}`);
 
         ref.set({
@@ -83,7 +104,7 @@ const registerEndpoints = (app) => {
         let url_params = querystring.stringify({
             task: task,
             bcid: bcid,
-            // address: address,
+            address: address,
             app_callback_url: app_callback_url
         })
 
@@ -103,8 +124,8 @@ const registerEndpoints = (app) => {
             bcid: req.query.bcid,
             task: req.query.task,
             // These are for providing additional security
-            // livedetection: true,
-            // challenge: true
+            // livedetection: false,
+            // challenge: false
             // autoenroll: true
         })
         // console.log(access_token)
@@ -128,42 +149,53 @@ const registerEndpoints = (app) => {
         // unsafe property override here...
         let augmented_result = _.extend(result, state);
 
-        console.log(augmented_result);
+        if (augmented_result.Action === 'identification') {
+            if (augmented_result.Success) {
+                res.redirect(augmented_result.app_callback_url + '?' + querystring.stringify({
+                    bcid: augmented_result.BCID
+                }));
+            } else {
+                res.json(augmented_result)
+            }
+            return;
+        }
 
         if (!augmented_result.Success) {
             throw Error('Failed biometric challenge...');
         }
-
         let challenge = await getChallenge(state.address)
-
         // TODO: check expires first....
         if (moment().isAfter(moment.unix(challenge.expires))) {
             throw Error('Challange has expired. Please try again, with more haste...');
         }
 
-        let signature_address = await Toolbox.recover(state.address, challenge.challenge, state.signature);
-        let isMessageSignatureValid = signature_address === state.address;
+        let signature_address = await Toolbox.recover(augmented_result.address, challenge.challenge, augmented_result.signature);
+        let isMessageSignatureValid = signature_address === augmented_result.address;
 
         if (!isMessageSignatureValid) {
             throw Error('Signature does not match challenge... ECRecover failure.');
+        } else {
+            // TODO: As a system account, update Ethereum Event Store with result of token request 
+            // (success or failure)
+
+            var uid = augmented_result.address;
+            var additionalClaims = {
+                bcid: augmented_result.BCID,
+                address: augmented_result.address
+            };
+            var token = await admin.auth().createCustomToken(uid, additionalClaims);
+            // console.log(token);
+
+            let callback_url = augmented_result.app_callback_url + '?' + querystring.stringify({
+                token: token
+            })
+            res.redirect(callback_url);
         }
-
-        // TODO: As a system account, update Ethereum Event Store with result of token request 
-        // (success or failure)
-
-        var uid = state.address;
-        var additionalClaims = {
-            bcid: augmented_result.BCID,
-            address: state.address
-        };
-        var token = admin.auth().createCustomToken(uid, additionalClaims);
-
-        let callback_url = state.app_callback_url + '?' + querystring.stringify({
-            token: token
-        })
-        res.redirect(callback_url);
     });
 
+    app.get('/api/v0/bioid/app_callback', async (req, res, next) => {
+        res.json(req.query)
+    });
 }
 
 module.exports = {
