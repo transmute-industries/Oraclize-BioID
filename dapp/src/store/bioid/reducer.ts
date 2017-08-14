@@ -8,17 +8,27 @@ const getSearchObject = (searchFromLocation: string) => {
     (key, value) => { return key === "" ? value : decodeURIComponent(value) }) : {}
 }
 
+import { store } from '../../store/store'
+
+import { push } from 'react-router-redux';
 
 const handlers = {
   ['@@router/LOCATION_CHANGE']: (state: any, action: any) => {
     let searchObject = getSearchObject(action.payload.search)
-    let containsAction = ['enrollment', 'verification', 'identification'].indexOf(searchObject.Action) !== -1;
-    if (containsAction && searchObject.Success == 'true') {
-      return {
-        ...state,
-        bcid: searchObject.BCID
-      };
+    // console.log('maybe login with token: ', searchObject)
+    if (searchObject.token) {
+      firebase.auth().signInWithCustomToken(searchObject.token)
+        .then(() => {
+          store.dispatch(push(window.location.pathname));
+        })
+        .catch((error: any) => {
+          // Handle Errors here.
+          // var errorCode = error.code;
+          // var errorMessage = error.message;
+          // ...
+        });
     }
+
     return state;
   }
 };

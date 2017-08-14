@@ -15,4 +15,19 @@ let config: any = {
     esfa: require('./contracts/UnsafeEventStoreFactory')
 };
 
+
+firebase.initializeApp({
+    apiKey: "AIzaSyDIXrTv0TD9zdaCy5n_QXm6_VMaS-1B3sQ",
+    authDomain: "transmute-industries.firebaseapp.com",
+    databaseURL: "https://transmute-industries.firebaseio.com",
+    projectId: "transmute-industries",
+    storageBucket: "transmute-industries.appspot.com",
+    messagingSenderId: "1068223304219"
+});
+
+firebase.auth()
+    .onAuthStateChanged((user: any) => {
+        console.log('user: ', user)
+    })
+
 export default TransmuteFramework.init(config);
